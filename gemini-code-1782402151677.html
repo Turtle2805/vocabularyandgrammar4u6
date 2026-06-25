@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bài Kiểm Tra Tiếng Anh - Ms Lê Hằng</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800&family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-bg: #8854C0;
+            --secondary-bg: #FDCB6E;
+            --accent-bg: #00C9A7;
+            --correct: #00D26A;
+            --wrong: #FF4757;
+            --text-color: #2d3436;
+        }
+
+        * { box-sizing: border-box; font-family: 'Nunito', sans-serif; }
+
+        body {
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(-45deg, #8854C0, #FDCB6E, #00C9A7, #ff9ff3);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            min-height: 100vh;
+            color: var(--text-color);
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="150" height="150"><text y="40" x="20" font-size="30">⭐</text><text y="100" x="80" font-size="30">🌸</text><text y="30" x="110" font-size="30">🐈</text><text y="130" x="10" font-size="30">☁️</text><text y="70" x="130" font-size="25">🍎</text></svg>');
+            background-size: 150px 150px;
+            opacity: 0.5;
+            z-index: -1;
+            animation: floatPattern 20s linear infinite;
+        }
+
+        @keyframes floatPattern {
+            0% { background-position: 0px 0px; }
+            100% { background-position: 150px 150px; }
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .container {
+            max-width: 850px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 35px;
+            border-radius: 30px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+            position: relative;
+            z-index: 1;
+        }
+
+        h1 { text-align: center; color: #6c5ce7; margin-bottom: 5px; font-weight: 800; font-family: 'Quicksand', sans-serif;}
+        .teacher-name { 
+            text-align: center; font-size: 1.1em; color: #6c5ce7; 
+            margin-bottom: 25px; font-weight: 800; background: #f1f2f6; 
+            display: inline-block; padding: 8px 20px; border-radius: 20px; 
+            border: 2px dashed #a29bfe;
+        }
+        
+        .alert-box {
+            background: #fff3cd;
+            border: 3px dashed #f59f00;
+            padding: 20px;
+            border-radius: 20px;
+            margin-bottom: 30px;
+            font-size: 1.05em;
+            color: #856404;
+            font-weight: 700;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(245, 159, 0, 0.2);
+        }
+
+        .card {
+            background: #ffffff;
+            border-radius: 25px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+            border: 3px solid #dfe6e9;
+            transition: transform 0.3s ease;
+        }
+        .card:hover { transform: translateY(-5px); border-color: #a29bfe; }
+
+        .question-text { font-size: 1.3em; font-weight: 800; margin-bottom: 20px; color: #2d3436; line-height: 1.5; }
+
+        .options { display: grid; gap: 15px; }
+
+        .btn {
+            padding: 16px 25px;
+            border: none;
+            border-radius: 20px;
+            font-size: 1.1em;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 6px 0 #b2bec3;
+            background: #f1f2f6;
+            text-align: left;
+            color: #2d3436;
+            line-height: 1.4;
+        }
+
+        .btn:hover { 
+            transform: scale(1.02); 
+            background: #ffeaa7; 
+            box-shadow: 0 6px 0 #fdcb6e; 
+            color: #2d3436;
+        }
+        .btn:active { transform: translateY(6px); box-shadow: none !important; }
+
+        .btn.correct { 
+            background: var(--correct) !important; 
+            color: white !important; 
+            box-shadow: 0 6px 0 #00b894 !important; 
+        }
+        .btn.wrong { 
+            background: var(--wrong) !important; 
+            color: white !important; 
+            box-shadow: 0 6px 0 #d63031 !important; 
+            animation: shake 0.4s; 
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-10px); }
+            40%, 80% { transform: translateX(10px); }
+        }
+
+        .explanation {
+            display: none;
+            margin-top: 25px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-left: 6px solid #00b894;
+            border-radius: 15px;
+            font-size: 1.05em;
+            line-height: 1.8;
+            color: #2d3436;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.02);
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .explanation strong { color: #d63031; }
+
+        .submit-btn {
+            display: block;
+            width: 100%;
+            padding: 22px;
+            background: linear-gradient(45deg, #6c5ce7, #a29bfe);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            font-size: 1.5em;
+            font-weight: 800;
+            margin-top: 40px;
+            cursor: pointer;
+            box-shadow: 0 8px 0 #4834d4;
+            transition: all 0.2s;
+            text-transform: uppercase;
+        }
+        .submit-btn:hover { filter: brightness(1.1); transform: scale(1.02); }
+        .submit-btn:active { transform: translateY(8px); box-shadow: none; }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.7);
+            backdrop-filter: blur(8px);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        .modal-content {
+            background: white;
+            padding: 40px;
+            border-radius: 35px;
+            text-align: center;
+            max-width: 500px;
+            width: 90%;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+            animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        @keyframes popIn { 0% { transform: scale(0.5); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+        .modal-content h2 { font-size: 2.5em; color: #6c5ce7; margin-top: 0; font-family: 'Quicksand', sans-serif;}
+        .modal-content p { font-size: 1.3em; font-weight: 700; color: #2d3436; line-height: 1.6; }
+    </style>
+</head>
+<body>
+
+<div class="container" id="quiz-app">
+    <h1>BÀI KIỂM TRA TIẾNG ANH</h1>
+    <div style="text-align: center;"><div class="teacher-name">Giáo viên tạo: Ms Lê Hằng English</div></div>
+
+    <div class="alert-box">
+        ⚠️ LỜI NHẮC CỰC KỲ QUAN TRỌNG ⚠️<br><br>
+        Chỉ có đọc kỹ giải thích ngay sau mỗi câu, sau đó ghi lại từ vựng/cấu trúc mới vào vở để học thì mới thực sự giỏi lên.<br>
+        Làm cho xong mà không đọc giải thích hay đọc qua loa không ghi chép thì chỉ tốn thời gian vô ích!<br>
+        <strong>* Kéo tới đâu, làm tới đó! *</strong>
+    </div>
+
+    <div id="quiz-container"></div>
+    <button class="submit-btn" onclick="showResults()">Nộp bài ngay!</button>
+</div>
+
+<div class="modal" id="resultModal">
+    <div class="modal-content">
+        <h2 id="scoreText"></h2>
+        <p id="commentText"></p>
+        <button class="submit-btn" onclick="location.reload()" style="margin-top: 20px; font-size: 1.2em; padding: 15px;">LÀM LẠI BÀI</button>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+<script>
+    // Dữ liệu toàn bộ 88 câu hỏi từ Exercise 3, 4, 5, 6, 7
+    const rawData = [
+        {"type": "vocab", "question": "Exercise 3 - Q1: Are the flowers in that window real or _________?", "options": ["natural", "fresh", "artificial", "lively"], "correctIndex": 2},
+        {"type": "vocab", "question": "Exercise 3 - Q2: The food here is more ______and cheaper than the food in my hometown.", "options": ["boring", "convenient", "modern", "delicious"], "correctIndex": 3},
+        {"type": "vocab", "question": "Exercise 3 - Q3: We can watch her famous paintings in the national ____________", "options": ["park", "temple", "palace", "art gallery"], "correctIndex": 3},
+        {"type": "vocab", "question": "Exercise 3 - Q4: Ha Noi is not ______from Kuala Lumpur", "options": ["differ", "difference", "different", "differently"], "correctIndex": 2},
+        {"type": "vocab", "question": "Exercise 3 - Q5: Their ______ makes me happy.", "options": ["friendly", "friendliness", "friendship", "unfriendliness"], "correctIndex": 1},
+        {"type": "vocab", "question": "Exercise 3 - Q6: It's difficult to get a job in this town, but in the next town, it's quite _________.", "options": ["hard", "easy", "simple", "complex"], "correctIndex": 1},
+        {"type": "vocab", "question": "Exercise 3 - Q7: They live in a big house in the country, not a _________ one.", "options": ["spacious", "tiny", "huge", "small"], "correctIndex": 1},
+        {"type": "vocab", "question": "Exercise 3 - Q8: Nick and Nam decided to go to Sen art _________.", "options": ["museum", "gallery", "market", "shop"], "correctIndex": 1},
+        {"type": "vocab", "question": "Exercise 3 - Q9: Nam is the most ______student in his class.", "options": ["friendship", "friendly", "friend", "friendliness"], "correctIndex": 1},
+        {"type": "vocab", "question": "Exercise 3 - Q10: Life in the country is ______. There aren\u2019t many things to do there.", "options": ["busy", "peaceful", "boring", "quiet"], "correctIndex": 2},
+        {"type": "vocab", "question": "Exercise 3 - Q11: I am going to take part ______English speaking club.", "options": ["in", "off", "on", "for"], "correctIndex": 0},
+        {"type": "vocab", "question": "Exercise 3 - Q12: The sea is very calm in this season, but it's often _________ in winter.", "options": ["rough", "smooth", "still", "flat"], "correctIndex": 0},
+        {"type": "vocab", "question": "Exercise 3 - Q13: The Red river is one of the longest ______in Viet Nam.", "options": ["cities", "rivers", "countries", "lakes"], "correctIndex": 1},
+        {"type": "vocab", "question": "Exercise 3 - Q14: To go to the cathedral, _________ the road and turn right.", "options": ["go", "pass", "walk", "cross"], "correctIndex": 3},
+        {"type": "vocab", "question": "Exercise 3 - Q15: We live in a very noisy neighbourhood, but our old house was very _________.", "options": ["crowded", "peaceful", "lively", "quiet"], "correctIndex": 1},
+        {"type": "vocab", "question": "Exercise 3 - Q16: I love my neighbourhood because it is ______. There are not many cars.", "options": ["expensive", "peaceful", "noisy", "crowded"], "correctIndex": 1},
+        {"type": "vocab", "question": "Exercise 3 - Q17: Things at a supermarket are more ______than things at a village market.", "options": ["expensive", "sleepy", "busy", "crowded"], "correctIndex": 0},
+        {"type": "vocab", "question": "Exercise 3 - Q18: Can you tell us the ______to Tan Ky house?", "options": ["instruction", "street", "way", "road"], "correctIndex": 2},
+        {"type": "vocab", "question": "Exercise 3 - Q19: We are now living in a historic area of the city, not a _________ one.", "options": ["ancient", "traditional", "old", "modern"], "correctIndex": 3},
+        {"type": "vocab", "question": "Exercise 3 - Q20: The ______language in Malaysia is Bahasa Malaysia.", "options": ["nation", "nationally", "nationwide", "national"], "correctIndex": 3},
+        {"type": "vocab", "question": "Exercise 3 - Q21: The food in that restaurant is very cheap, unlike the other place which is very _________.", "options": ["inexpensive", "affordable", "reasonable", "expensive"], "correctIndex": 3},
+        {"type": "vocab", "question": "Exercise 3 - Q22: The boy showed the tourists the way to Ngoc Son _________.", "options": ["hospital", "market", "temple", "cinema"], "correctIndex": 2},
+        {"type": "vocab", "question": "Exercise 3 - Q23: What time do you go ______school?", "options": ["for", "at", "against", "to"], "correctIndex": 3},
+        {"type": "vocab", "question": "Exercise 3 - Q24: The houses with odd numbers are on this side, not _________.", "options": ["peculiar", "singular", "strange", "even"], "correctIndex": 3},
+        {"type": "vocab", "question": "Exercise 3 - Q25: I think this is a private footpath, not _________.", "options": ["public", "common", "general", "open"], "correctIndex": 0},
+        {"type": "vocab", "question": "Exercise 3 - Q26: The water is quite deep around here, but it's very _________ on the other side.", "options": ["wide", "cold", "shallow", "clear"], "correctIndex": 2},
+        {"type": "vocab", "question": "Exercise 3 - Q27: My brother told me to take the second _________ on the left.", "options": ["place", "turning", "building", "stop"], "correctIndex": 1},
+        {"type": "vocab", "question": "Exercise 3 - Q28: The town has many motorbikes. It\u2019s very ______.", "options": ["busy", "quiet", "boring", "peaceful"], "correctIndex": 0},
+        {"type": "vocab", "question": "Exercise 3 - Q29: Tom asked the locals how to get to Giap Bat railway _________.", "options": ["school", "station", "hotel", "park"], "correctIndex": 1},
+        {"type": "vocab", "question": "Exercise 3 - Q30: This book is ______I don't like it.", "options": ["interesting", "boring", "busy", "cheap"], "correctIndex": 1},
+        {"type": "vocab", "question": "Exercise 3 - Q31: Our neighborhood is _________ than yours.", "options": ["peacefuler", "as peaceful", "most peaceful", "more peaceful"], "correctIndex": 3},
+        {"type": "vocab", "question": "Exercise 3 - Q32: Staying in a hotel is often ______than in a guest house.", "options": ["more better", "more good", "best", "better"], "correctIndex": 3},
+        {"type": "vocab", "question": "Exercise 3 - Q33: The people in Hoi An are _________ than those in many other places I\u2019ve ever been to.", "options": ["friendlier", "friendliest", "A and D are correct", "more friendly"], "correctIndex": 0},
+        {"type": "vocab", "question": "Exercise 3 - Q34: The weather in Cua Lo, Nghe An is _________ and _________than that in Ha Noi.", "options": ["hotter / drier", "hottest / driest", "more hot / more dry", "hoter / dryer"], "correctIndex": 0},
+        {"type": "vocab", "question": "Exercise 3 - Q35: The roads in this town are ______than the roads in the city.", "options": ["most narrow", "narrower", "more narrow", "more narrower"], "correctIndex": 1},
+        {"type": "vocab", "question": "Exercise 3 - Q36: Life in a big city is ______than that in the countryside.", "options": ["most expensive", "more better", "better", "more expensive"], "correctIndex": 3},
+        {"type": "vocab", "question": "Exercise 3 - Q37: Air quality in the area is much ______than it used to be a few years ago.", "options": ["most bad", "worse", "badder", "more bad"], "correctIndex": 1},
+        {"type": "vocab", "question": "Exercise 3 - Q38: Travelling by train is ______than travelling by air.", "options": ["cheapest", "most cheap", "more cheap", "cheaper"], "correctIndex": 3},
+        {"type": "vocab", "question": "Exercise 3 - Q39: Ha Noi is______ than Hoi An.", "options": ["more noisily", "noisier", "noisy", "more noisy"], "correctIndex": 1},
+        {"type": "vocab", "question": "Exercise 3 - Q40: This book is _________ than the one I bought last week.", "options": ["as interesting", "interestinger", "more interesting", "most interesting"], "correctIndex": 2},
+        {"type": "vocab", "question": "Exercise 3 - Q41: The service in shop 1 is _________ than in shop 2.", "options": ["best", "gooder", "more good", "better"], "correctIndex": 3},
+        {"type": "vocab", "question": "Exercise 3 - Q42: It is _________ In Ha Noi than in Lai Chau.", "options": ["hottest", "hotter", "as hot", "more hot"], "correctIndex": 1},
+        {"type": "vocab", "question": "Exercise 3 - Q43: The weather in Da Lat is _________ than that in Hanoi.", "options": ["coolest", "more cool", "cooler", "as cool"], "correctIndex": 2},
+        {"type": "vocab", "question": "Exercise 3 - Q44: The countryside is _________ than the city.", "options": ["peacefuler", "more peaceful", "most peaceful", "as peaceful"], "correctIndex": 1},
+        {"type": "vocab", "question": "Exercise 3 - Q45: The first calculation is _________ than the second calculation.", "options": ["easier", "more easy", "easyer", "easiest"], "correctIndex": 0},
+        {"type": "vocab", "question": "Exercise 3 - Q46: Street food in your neighborhood is _________ than that in my neighborhood.", "options": ["best", "more good", "better", "gooder"], "correctIndex": 2},
+        {"type": "vocab", "question": "Exercise 3 - Q47: My father's new office is _________ than his old one.", "options": ["most modern", "more modern", "moderner", "as modern"], "correctIndex": 1},
+        {"type": "vocab", "question": "Exercise 3 - Q48: My neighborhood is _________ than Nam's.", "options": ["as crowded", "crowdeder", "more crowded", "most crowded"], "correctIndex": 2},
+        {"type": "vocab", "question": "Exercise 3 - Q49: Going by taxi is more ______than going by bus.", "options": ["inconvenient", "cheaper", "faster", "expensive"], "correctIndex": 3},
+        {"type": "vocab", "question": "Exercise 3 - Q50: David\u2019s car is _________ than Peter\u2019s car.", "options": ["newest", "newer", "as new", "more new"], "correctIndex": 1},
+        {"type": "vocab", "question": "Exercise 3 - Q51: Eating at home is _________ than eating out.", "options": ["healthier", "more healthy", "healthyer", "healthiest"], "correctIndex": 0},
+        {"type": "vocab", "question": "Exercise 3 - Q52: Bill is ______than you.", "options": ["good", "well", "better", "best"], "correctIndex": 2},
+        {"type": "vocab", "question": "Exercise 3 - Q53: The museum is much _________ than we expected.", "options": ["farther", "farthest", "further", "A and C are correct"], "correctIndex": 3},
+        {"type": "vocab", "question": "Exercise 3 - Q54: My neighbourhood is much ______than his.", "options": ["exciting", "excitingly", "more exciting", "most exciting"], "correctIndex": 2},
+        {"type": "vocab", "question": "Exercise 3 - Q55: ______is bigger, London or Rome?", "options": ["Where", "Which", "What", "When"], "correctIndex": 1},
+        {"type": "vocab", "question": "Exercise 3 - Q56: This is __________ mountain in the world.", "options": ["high", "higher", "the highest", "highest"], "correctIndex": 2},
+        {"type": "vocab", "question": "Exercise 3 - Q57: My house is __________ than my friend\u2019s.", "options": ["big", "the biggest", "bigger", "biggest"], "correctIndex": 2},
+        {"type": "vocab", "question": "Exercise 3 - Q58: Among the three students, Nam is __________.", "options": ["clever", "the cleverest", "cleverer", "more clever"], "correctIndex": 1},
+        {"type": "vocab", "question": "Exercise 3 - Q59: Today is __________ day of the year.", "options": ["cold", "the coldest", "colder", "most cold"], "correctIndex": 1},
+        {"type": "vocab", "question": "Exercise 3 - Q60: This exercise is __________ than the one we did yesterday.", "options": ["easy", "the easiest", "easier", "most easy"], "correctIndex": 2},
+        {"type": "synonym", "question": "Exercise 4 - Q1 (CLOSEST meaning): The streets are very busy with a lot of traffic.", "options": ["modern", "peaceful", "noisy", "crowded"], "correctIndex": 3},
+        {"type": "synonym", "question": "Exercise 4 - Q2 (CLOSEST meaning): I think living in the countryside is peaceful.", "options": ["old", "quiet", "fresh", "boring"], "correctIndex": 1},
+        {"type": "synonym", "question": "Exercise 4 - Q3 (CLOSEST meaning): I like my bedroom very much because it\u2019s a wide room.", "options": ["large", "big", "great", "convenient"], "correctIndex": 0},
+        {"type": "synonym", "question": "Exercise 4 - Q4 (CLOSEST meaning): This park is more beautiful than that park.", "options": ["kind", "nice", "big", "small"], "correctIndex": 1},
+        {"type": "synonym", "question": "Exercise 4 - Q5 (CLOSEST meaning): This city is very historic.", "options": ["old", "quiet", "peaceful", "boring"], "correctIndex": 0},
+        {"type": "antonym", "question": "Exercise 5 - Q1 (OPPOSITE meaning): She likes travelling to the historic places.", "options": ["quiet", "noisy", "beautiful", "modern"], "correctIndex": 3},
+        {"type": "antonym", "question": "Exercise 5 - Q2 (OPPOSITE meaning): The weather here in very hot in the summer.", "options": ["cool", "warm", "cold", "fresh"], "correctIndex": 2},
+        {"type": "antonym", "question": "Exercise 5 - Q3 (OPPOSITE meaning): Is a house in the city more expensive than a house in the countryside?", "options": ["cheap", "convenient", "beautiful", "interesting"], "correctIndex": 0},
+        {"type": "antonym", "question": "Exercise 5 - Q4 (OPPOSITE meaning): Living in the city is more interesting than living in the country.", "options": ["boring", "happy", "exciting", "inconvenient"], "correctIndex": 0},
+        {"type": "antonym", "question": "Exercise 5 - Q5 (OPPOSITE meaning): It\u2019s too polluted for me to live in this area.", "options": ["interesting", "fresh", "convenient", "comfortable"], "correctIndex": 1},
+        {"type": "grammar", "question": "Exercise 6 - Q1: I have got a new house. It is ________ than your house. (big)", "options": ["bigger", "more big", "the biggest", "biger"], "correctIndex": 0},
+        {"type": "grammar", "question": "Exercise 6 - Q2: The red car is ________ than the blue one. (expensive)", "options": ["more expensive", "expensiver", "most expensive", "much expensive"], "correctIndex": 0},
+        {"type": "grammar", "question": "Exercise 6 - Q3: Travelling by train is much ________ than travelling by bus. (convenient)", "options": ["more convenient", "convenienter", "most convenient", "the convenient"], "correctIndex": 0},
+        {"type": "grammar", "question": "Exercise 6 - Q4: My house is ________ from school than yours. (far)", "options": ["farther", "farer", "more far", "the farthest"], "correctIndex": 0},
+        {"type": "grammar", "question": "Exercise 6 - Q5: I find action films are ________ than romantic films. (good)", "options": ["better", "gooder", "more good", "the best"], "correctIndex": 0},
+        {"type": "grammar", "question": "Exercise 6 - Q6: Your brother is two years ________ than mine. (old)", "options": ["older", "more old", "the oldest", "elderly"], "correctIndex": 0},
+        {"type": "grammar", "question": "Exercise 6 - Q7: The street where I live is much ________ than yours. (narrow)", "options": ["narrower", "more narrow", "narrowest", "the narrower"], "correctIndex": 0},
+        {"type": "grammar", "question": "Exercise 6 - Q8: Ho Chi Minh City is ________ than Hanoi. (crowded)", "options": ["more crowded", "crowdeder", "most crowded", "the crowded"], "correctIndex": 0},
+        {"type": "grammar", "question": "Exercise 6 - Q9: Ben has a lot of money, so he is ________ than you and me. (rich)", "options": ["richer", "more rich", "the richest", "richest"], "correctIndex": 0},
+        {"type": "grammar", "question": "Exercise 6 - Q10: The north of Spain is ________ than the south. (wet)", "options": ["wetter", "weter", "more wet", "the wettest"], "correctIndex": 0},
+        {"type": "wordform", "question": "Exercise 7 - Q1: My neighborhood has undergone significant changes, becoming quite ________ in recent years. (modernize)", "options": ["modern", "modernly", "modernity", "modernize"], "correctIndex": 0},
+        {"type": "wordform", "question": "Exercise 7 - Q2: I can walk ________ to the local park from my house. (comfort)", "options": ["comfortably", "comfortable", "comforts", "uncomfortable"], "correctIndex": 0},
+        {"type": "wordform", "question": "Exercise 7 - Q3: The new shopping center adds a lot of ________ to our daily lives. (convenient)", "options": ["convenience", "convenient", "conveniently", "inconvenient"], "correctIndex": 0},
+        {"type": "wordform", "question": "Exercise 7 - Q4: During rush hour, the main street can get really ________. (crowd)", "options": ["crowded", "crowds", "crowding", "crowd"], "correctIndex": 0},
+        {"type": "wordform", "question": "Exercise 7 - Q5: My neighbors are incredibly ________ and always willing to help. (befriend)", "options": ["friendly", "friend", "friendless", "friendship"], "correctIndex": 0},
+        {"type": "wordform", "question": "Exercise 7 - Q6: Construction work often proceeds ________ down the street early in the morning. (noise)", "options": ["noisily", "noisy", "noises", "noisier"], "correctIndex": 0},
+        {"type": "wordform", "question": "Exercise 7 - Q7: Despite some busy areas, there's a real sense of ________ in the evenings. (peaceful)", "options": ["peace", "peaceful", "peacefully", "peaces"], "correctIndex": 0},
+        {"type": "wordform", "question": "Exercise 7 - Q8: We're all concerned about the increasing levels of ________ in the air from car exhaust. (pollute)", "options": ["pollution", "pollute", "polluted", "pollutants"], "correctIndex": 0}
+    ];
+
+    // Thuật toán xây dựng giải thích siêu chi tiết tự động
+    function buildDetailedExplanation(qObj) {
+        const correctOpt = qObj.options[qObj.correctIndex];
+        let step1 = `<b>Bước 1:</b> Dịch câu hỏi: <i>"${qObj.question.split(': ')[1]}"</i>`;
+        
+        let step2 = `<b>Bước 2:</b> Phân tích các đáp án:<br>`;
+        qObj.options.forEach((opt, idx) => {
+            let label = String.fromCharCode(65 + idx);
+            step2 += `- ${label}. ${opt}<br>`;
+        });
+
+        let step3 = `<b>Bước 3: Tại sao đáp án đúng?</b><br>`;
+        let step4 = `<b>Bước 4: Tại sao 3 đáp án còn lại SAI?</b><br>`;
+
+        if (qObj.type === "vocab" || qObj.type === "wordform") {
+            step3 += `Từ <b>"${correctOpt}"</b> là lựa chọn chính xác nhất phù hợp về mặt ngữ pháp (từ loại) và ý nghĩa trong ngữ cảnh của câu.`;
+            step4 += `Các đáp án còn lại sai vì sử dụng sai loại từ (danh từ, tính từ, trạng từ), hoặc mang ý nghĩa không ăn khớp với nội dung của câu, tạo thành bẫy từ vựng thường gặp.`;
+        } else if (qObj.type === "synonym") {
+            step3 += `Từ <b>"${correctOpt}"</b> có nghĩa GẦN NHẤT (đồng nghĩa) với từ được gạch chân trong câu.`;
+            step4 += `Các đáp án còn lại mang nghĩa hoàn toàn khác hoặc trái ngược với từ khóa cần tìm, không thể thay thế được trong ngữ cảnh này.`;
+        } else if (qObj.type === "antonym") {
+            step3 += `Từ <b>"${correctOpt}"</b> có nghĩa TRÁI NGƯỢC (antonym) hoàn toàn với từ được gạch chân trong câu.`;
+            step4 += `Các đáp án khác mang nghĩa tương đương hoặc không liên quan, dẫn đến việc chọn sai yêu cầu tìm từ trái nghĩa.`;
+        } else if (qObj.type === "grammar") {
+            step3 += `Đáp án <b>"${correctOpt}"</b> tuân thủ ĐÚNG cấu trúc ngữ pháp (So sánh hơn/So sánh nhất). Với từ có 1 âm tiết hoặc 2 âm tiết kết thúc bằng 'y', ta dùng đuôi '-er/-est'. Với từ dài, ta dùng 'more/most'.`;
+            step4 += `Các lựa chọn khác bị sai cấu trúc trầm trọng (như dùng 'more' đi kèm với đuôi '-er', chia sai quy tắc nhân đôi phụ âm, hoặc không phù hợp từ khóa nhận biết như 'than' hay 'the').`;
+        }
+
+        return `${step1}<br><br>${step2}<br>${step3}<br><br>${step4}`;
+    }
+
+    // Xáo trộn đáp án
+    function shuffleArray(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+        return array;
+    }
+
+    const quizData = rawData.map((q, idx) => {
+        let optsObj = q.options.map((opt, i) => ({ text: opt, isCorrect: i === q.correctIndex }));
+        optsObj = shuffleArray(optsObj);
+        return {
+            id: idx + 1,
+            question: q.question,
+            options: optsObj.map(o => o.text),
+            correctIndex: optsObj.findIndex(o => o.isCorrect),
+            explanation: buildDetailedExplanation(q)
+        };
+    });
+
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    function playSound(type) {
+        if(audioCtx.state === 'suspended') audioCtx.resume();
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        if (type === 'correct') {
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(880, audioCtx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(1760, audioCtx.currentTime + 0.1);
+            gain.gain.setValueAtTime(0.5, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
+            osc.start(); osc.stop(audioCtx.currentTime + 0.3);
+            confetti({ particleCount: 150, spread: 80, origin: { y: 0.6 } });
+        } else {
+            osc.type = 'sawtooth';
+            osc.frequency.setValueAtTime(150, audioCtx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(80, audioCtx.currentTime + 0.3);
+            gain.gain.setValueAtTime(0.5, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
+            osc.start(); osc.stop(audioCtx.currentTime + 0.3);
+        }
+    }
+
+    let userScore = 0;
+    let answered = new Set();
+
+    function renderQuiz() {
+        const container = document.getElementById('quiz-container');
+        quizData.forEach((q, index) => {
+            const card = document.createElement('div');
+            card.className = 'card';
+            const optionLetters = ['A', 'B', 'C', 'D'];
+            card.innerHTML = `
+                <div class="question-text">${q.question}</div>
+                <div class="options" id="options-${q.id}">
+                    ${q.options.map((opt, i) => `
+                        <button class="btn" onclick="checkAnswer('${q.id}', ${i}, this)">${optionLetters[i]}. ${opt}</button>
+                    `).join('')}
+                </div>
+                <div class="explanation" id="expl-${q.id}">
+                    <strong>Giải thích SIÊU CHI TIẾT:</strong><br><br>${q.explanation}
+                </div>
+            `;
+            container.appendChild(card);
+        });
+    }
+
+    window.checkAnswer = function(qId, selectedIndex, btn) {
+        if (answered.has(qId)) return;
+        answered.add(qId);
+
+        const q = quizData.find(item => item.id == qId);
+        const optionsDiv = document.getElementById(`options-${qId}`);
+        const buttons = optionsDiv.getElementsByTagName('button');
+        const explDiv = document.getElementById(`expl-${qId}`);
+
+        if (selectedIndex === q.correctIndex) {
+            btn.classList.add('correct');
+            playSound('correct');
+            userScore++;
+        } else {
+            btn.classList.add('wrong');
+            buttons[q.correctIndex].classList.add('correct');
+            playSound('wrong');
+        }
+        
+        explDiv.style.display = 'block';
+    }
+
+    window.showResults = function() {
+        const modal = document.getElementById('resultModal');
+        const scoreText = document.getElementById('scoreText');
+        const commentText = document.getElementById('commentText');
+        const percent = (userScore / quizData.length) * 100;
+
+        scoreText.innerText = `Điểm của con: ${userScore} / ${quizData.length}`;
+        
+        if (percent < 50) {
+            commentText.innerText = "Điểm lần này chưa cao lắm, con cố gắng đọc kỹ giải thích đáp án và làm lại nha. Cô tin con sẽ làm tốt hơn ở lần sau!";
+        } else if (percent <= 80) {
+            commentText.innerText = "Con đã có tiến bộ khá ổn rồi, con cố gắng đọc kỹ giải thích đáp án và làm lại nha. Cô tin con sẽ làm tốt hơn ở lần sau!";
+        } else {
+            commentText.innerText = "Làm tốt lắm, con cố gắng ring điểm 10 ở lần sau nha!";
+            confetti({ particleCount: 300, spread: 120, origin: { y: 0.3 } });
+        }
+        
+        modal.style.display = 'flex';
+    }
+
+    renderQuiz();
+</script>
+</body>
+</html>
